@@ -44,3 +44,6 @@
 - `flutter build apk --release`
 - `flutter build ios`
 - `flutter build macos`
+
+
+（fork后评价：没api啊咋用😅）
