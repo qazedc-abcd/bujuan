@@ -1,8 +1,8 @@
-name: Build APK
+name: Build Flutter APK
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, feature/* ]  # 你当前在 feature/n... 分支，也可以触发
   workflow_dispatch:
 
 jobs:
@@ -17,16 +17,21 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: gradle
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'  # 用最新稳定版
+          channel: 'stable'
 
-      - name: Build with Gradle
-        run: ./gradlew assembleRelease
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --release
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-release
-          path: app/build/outputs/apk/release/*.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
